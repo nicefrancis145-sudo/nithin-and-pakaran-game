@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#08111c">
+    <title>Night Drive — Neon Rush</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="game-shell">
+      <header class="topbar">
+        <a class="wordmark" href="#" aria-label="Night Drive home">
+          <span class="wordmark-mark" aria-hidden="true">N</span>
+          <span>NIGHT<span class="wordmark-light">DRIVE</span></span>
+        </a>
+        <span class="edition">LOW-POLY / 3D</span>
+      </header>
+
+      <section class="game-layout" aria-label="Neon Rush racing game">
+        <div class="game-column">
+          <div class="game-heading">
+            <div>
+              <p class="eyebrow"><span class="live-dot"></span> MIDNIGHT CIRCUIT</p>
+              <h1>Neon <span>Rush</span></h1>
+              <p class="subtitle">Low-poly nights. Own the road.</p>
+            </div>
+            <div class="best-card">
+              <span>PERSONAL BEST</span>
+              <strong id="best-score">00000</strong>
+            </div>
+          </div>
+
+          <div class="game-frame">
+            <canvas id="game-canvas" aria-label="Low-poly 3D-style racing game, viewed from behind the car. Dodge traffic by changing lanes." role="img"></canvas>
+            <div class="hud" aria-live="polite">
+              <div class="hud-stat">
+                <span class="hud-label">DISTANCE</span>
+                <strong id="score">00000</strong>
+              </div>
+              <div class="speedometer">
+                <span class="speed-value" id="speed">0</span>
+                <span class="speed-unit">KM/H</span>
+              </div>
+              <div class="hud-stat hud-right">
+                <span class="hud-label">RUN</span>
+                <strong id="run-state">READY</strong>
+              </div>
+            </div>
+            <button class="vehicle-switch" id="vehicle-switch" type="button" aria-label="Choose vehicle" aria-expanded="false" aria-controls="vehicle-picker" title="Choose vehicle (E)">
+              <svg class="vehicle-icon" viewBox="0 0 32 32" aria-hidden="true">
+                <path d="M5 21h5l4-7h5l3 7h5M9 21a3 3 0 1 0 6 0m7 0a3 3 0 1 0 6 0M14 14l-2-4h5l3 4m-7 0 5 7m-1-11 4 1 2 4" />
+              </svg>
+              <span id="vehicle-label">SEDAN</span>
+            </button>
+            <button class="sound-toggle" id="sound-toggle" type="button" aria-label="Turn sound off" aria-pressed="true" title="Turn sound off">
+              <svg class="sound-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 10v4h4l5 4V6l-5 4H4zM16 9a5 5 0 0 1 0 6m2-8a8 8 0 0 1 0 10" />
+              </svg>
+              <span id="sound-label">SOUND ON</span>
+            </button>
+            <button class="special-ability" id="special-ability" type="button" aria-label="Use special ability" hidden>
+              <span class="ability-icon" id="ability-icon" aria-hidden="true">✦</span>
+              <span class="ability-copy">
+                <strong id="ability-name">SPECIAL</strong>
+                <small id="ability-cooldown">READY</small>
+              </span>
+            </button>
+            <div class="vehicle-picker" id="vehicle-picker" role="group" aria-label="Choose a vehicle" hidden>
+              <p class="picker-heading">CHOOSE YOUR RIDE</p>
+              <button class="vehicle-option" id="choose-sedan" type="button" aria-pressed="true">
+                <span class="option-icon sedan-option-icon" aria-hidden="true">▰</span>
+                <span class="option-copy"><strong>Sedan</strong><small>City cruiser</small></span>
+                <span class="option-check" aria-hidden="true">✓</span>
+              </button>
+              <button class="vehicle-option" id="choose-scooter" type="button" aria-pressed="false">
+                <span class="option-icon scooter-option-icon" aria-hidden="true">⌁</span>
+                <span class="option-copy"><strong>Nithin</strong><small>TVS Jupiter-style scooter</small></span>
+                <span class="option-check" aria-hidden="true">✓</span>
+              </button>
+              <button class="vehicle-option" id="choose-pakaran" type="button" aria-pressed="false">
+                <span class="option-icon pakaran-option-icon" aria-hidden="true">▰</span>
+                <span class="option-copy"><strong>Pakaran</strong><small>Maruti 800 · 2005 model</small></span>
+                <span class="option-check" aria-hidden="true">✓</span>
+              </button>
+              <span class="picker-hint">CHOOSE A RIDE · ESC TO CLOSE</span>
+            </div>
+            <div class="camera-controls" aria-label="Camera controls">
+              <button class="camera-button camera-mode" id="camera-mode" type="button" aria-label="Switch to orbit camera">CHASE CAM</button>
+              <span class="camera-divider" aria-hidden="true"></span>
+              <button class="camera-button camera-rotate" id="camera-left" type="button" aria-label="Rotate camera left">↶</button>
+              <button class="camera-button camera-rotate" id="camera-right" type="button" aria-label="Rotate camera right">↷</button>
+              <button class="camera-button camera-reset" id="camera-reset" type="button" aria-label="Reset camera behind car">RESET</button>
+              <span class="camera-hint" id="camera-hint">DRAG TO ORBIT</span>
+            </div>
+            <div class="screen-overlay" id="screen-overlay">
+              <div class="overlay-card">
+                <span class="overlay-kicker" id="overlay-kicker">YOUR NIGHT STARTS HERE</span>
+                <h2 id="overlay-title">Ready to ride?</h2>
+                <p id="overlay-copy">Weave through traffic and see how far you can go.</p>
+                <button class="start-button" id="start-button" type="button">
+                  <span id="button-label">Start your run</span>
+                  <span aria-hidden="true">↗</span>
+                </button>
+                <span class="overlay-hint" id="overlay-hint">PRESS ENTER OR A TO START</span>
+              </div>
+            </div>
+            <div class="pause-indicator" id="pause-indicator" hidden>PAUSED <span>·</span> PRESS P TO RESUME</div>
+          </div>
+
+          <div class="game-footer">
+            <span><span class="status-dot"></span> GAME READY</span>
+            <span>ENDLESS RUN <span class="footer-divider">/</span> NO BRAKES</span>
+          </div>
+        </div>
+
+        <aside class="side-panel">
+          <div class="panel-block controls-block">
+            <p class="eyebrow">HOW TO PLAY</p>
+            <h2>Stay in<br>the fast lane.</h2>
+            <p class="panel-copy">Switch lanes to miss the traffic. One crash ends your run.</p>
+            <div class="control-list">
+              <div class="control-row">
+                <span class="control-icon keyboard-icon" aria-hidden="true">←<span>→</span></span>
+                <span><strong>Move</strong><small>Arrows / A-D · E vehicle · Space ability</small></span>
+              </div>
+              <div class="control-row">
+                <span class="control-icon" aria-hidden="true">⌁</span>
+                <span><strong>Touch</strong><small>Swipe left/right to steer · swipe orbit cam · ride and ability buttons</small></span>
+              </div>
+              <div class="control-row">
+                <span class="control-icon gamepad-icon" aria-hidden="true">●</span>
+                <span><strong>Controller</strong><small>D-pad / left stick · Y vehicle · X ability</small></span>
+              </div>
+            </div>
+          </div>
+          <div class="panel-block tip-block">
+            <span class="tip-icon" aria-hidden="true">✦</span>
+            <div><strong>Watch the gaps</strong><p>Traffic gets faster the farther you drive.</p></div>
+          </div>
+          <div class="panel-bottom">
+            <span>BUILT FOR EVERY DRIVE</span>
+            <span>PC <i>·</i> MOBILE <i>·</i> GAMEPAD</span>
+          </div>
+        </aside>
+      </section>
+      <footer class="page-footer"><span>© NIGHT DRIVE CLUB</span><span>NO MAP. NO LIMITS.</span></footer>
+    </main>
+    <script src="game.js"></script>
+  </body>
+</html>
